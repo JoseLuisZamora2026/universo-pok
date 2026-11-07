@@ -49,7 +49,16 @@ class _BusquedaPokemonState extends
       });
     }
   }
-
+List<dynamic> get pokemonesFiltrados
+{
+  return pokemones.where((pokemon) {
+    final nombre = pokemon['nombre'].toString().toLowerCase();
+    final coincideNombre = nombre.contains(nombreBuscado.trim().toLowerCase());
+    final tipos = List<String>.from(pokemon['tipo']);
+    final coincideTipo = tipoSeleccionado == 'Todos' || tipos.contains(tipoSeleccionado);
+    return coincideNombre && coincideTipo;
+  }).toList();
+}
   @override Widget build(BuildContext context)
   {
     return Scaffold(appBar: AppBar(title: const Text('Buscar Pokémon'),
@@ -63,9 +72,42 @@ class _BusquedaPokemonState extends
       });
     },
     ),
-    ],
+      const SizedBox(height: 16),
+      DropdownButtonFormField<String>(initialValue: tipoSeleccionado,
+        decoration: const InputDecoration(labelText:'Filtrar por tipo', prefixIcon: Icon(Icons.filter_list),
+        border: OutlineInputBorder(),),
+      items: ['Todos', 'Agua', 'Fuego', 'Planta', 'Veneno', 'Normal', 'Volador', 'Bicho',
+      'Electrico', 'Tierra', 'Hada'].map((tipo) {
+        return DropdownMenuItem<String>(value: tipo, child: Text(tipo),);
+        }).toList(), onChanged: (valor){
+      if (valor != null){
+        setState(() {
+          tipoSeleccionado = valor;
+        });
+       }
+      },
+     ),
+      const SizedBox(height: 16),
+      Expanded(child: cargando ? const Center(child: CircularProgressIndicator()): mensajeError != null ? Center(child: Text(mensajeError!)):
+    pokemonesFiltrados.isEmpty ? const Center(child: Text('No se encontraron Pokemon'),
+  ): ListView.builder(itemCount: pokemonesFiltrados.length,itemBuilder: (context, index){
+    final pokemon = pokemonesFiltrados[index];
+    return Card(margin: const EdgeInsets.only(bottom:10), child: ListTile(leading: Image.network(pokemon['imagen'],
+  width:55, height:55, errorBuilder: (context, error, stackTrace)
+  {
+    return const Icon(Icons.catching_pokemon);
+  },
+  ),
+  title: Text(pokemon['nombre']),
+  subtitle: Text((pokemon['tipo'] as List).join(', ')),
+  ),
+  );
+  },
+  ),
+  ),
+     ],
     ),
     ),
     );
-  }
+   }
 }

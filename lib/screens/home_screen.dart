@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-
+import 'busqueda_pokemon.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -69,16 +69,23 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
-            const Expanded(
-              child: Center(
-                child: Text(
-                  'El catálogo estará disponible próximamente.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+        const SizedBox(height: 10),
+            Expanded(child: Center(child: ElevatedButton.icon(onPressed: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const BusquedaPokemon(),
                 ),
+              );
+            },
+              icon:const Icon(Icons.search),
+              label: const Text ('Buscar Pokemon'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white, padding:
+              const EdgeInsets.symmetric(horizontal:25, vertical: 15,
+              ),
+              ),
               ),
             ),
+),
+
           ],
         ),
       ),
