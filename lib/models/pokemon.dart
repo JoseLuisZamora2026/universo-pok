@@ -19,7 +19,7 @@ class Pokemon {
       numeroPokedex: json['numero_pokedex'],
       nombre: json['nombre'],
       tipos: List<String>.from(json['tipos']),
-      imagen: 'assets/${json['imagen']}',
+      imagen: 'assets/Pokedex_50/${json['imagen'].toString().split('/').last}',
     );
   }
 }
