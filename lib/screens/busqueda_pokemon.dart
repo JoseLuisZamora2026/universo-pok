@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class BusquedaPokemon extends StatefulWidget {
   const BusquedaPokemon({super.key});
@@ -23,29 +24,24 @@ class _BusquedaPokemonState extends
     super.initState();
     cargarPokemones();
   }
-  Future<void> cargarPokemones() async
-  {
-    try {
-      final respuesta = await http.get(Uri.parse('https://raw.githubusercontent.com/JoseLuisZamora2026/universo-pok/refs/heads/main/Data/pokemon.json',
-      ),
-      );
-      if (respuesta.statusCode == 200)
-        {
-          final datos = jsonDecode(utf8.decode(respuesta.bodyBytes));
-          if (!mounted) return;
-          setState(() {
-            pokemones = datos;
-            cargando = false;
-            mensajeError = null;
-          });
-        } else{
-        throw Exception('Error al descargar los Pokémon');
-      }
-    }catch(error) {
+  Future<void> cargarPokemones() async{
+    try{
+      final contenido = await rootBundle.loadString('Data/pokemon.json');
+      final datos = jsonDecode(contenido);
+      if(!mounted) return;
+
+      setState(() {
+        pokemones = datos;
+        cargando = false;
+        mensajeError = null;
+      });
+    }catch(error){
+      debugPrint('Error al cargar poémon: $error');
       if (!mounted) return;
+
       setState(() {
         cargando = false;
-        mensajeError = 'No se pudieron cargar los Pokémon';
+        mensajeError = 'No se pudieron cargar los pokémon';
       });
     }
   }
