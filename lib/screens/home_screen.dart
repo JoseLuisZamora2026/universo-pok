@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../models/pokemon.dart';
 import '../services/pokemon_service.dart';
+import 'busqueda_pokemon.dart';
 
 // Pantalla principal de Universo Pokémon.
 // Utiliza StatefulWidget para actualizar la interfaz al cargar
@@ -177,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   pokemon.imagen,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
+                    debugPrint('ERROR AL CARGAR IMAGEN: $error');
                     return const Icon(
                       Icons.image_not_supported,
                       size: 60,
@@ -255,6 +257,19 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 25),
+            SizedBox(width: double.infinity, child: ElevatedButton.icon(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const BusquedaPokemon(),
+              ),
+              );
+            },
+            icon: const Icon(Icons.search),
+            label: const Text('Buscar Pokémon'),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            ),
+            ),
+            ),
+            const SizedBox(height: 15),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),

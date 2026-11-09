@@ -14,12 +14,16 @@ class Pokemon {
   });
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
+    final int id = (json['id'] as num).toInt();
     return Pokemon(
-      id: json['id'],
-      numeroPokedex: json['numero_pokedex'],
-      nombre: json['nombre'],
-      tipos: List<String>.from(json['tipos']),
-      imagen: 'assets/${json['imagen']}',
+        id: id, numeroPokedex: (json['numero_pokedex'] as num?)?.toInt() ?? id,
+        nombre: json['nombre'].toString(),
+    tipos: List<String>.from(json['tipo'] ?? json['tipos'] ??[]),
+    imagen: json.containsKey('tipos') ? 'assets/Pokedex_50/${json['imagen'].toString().split('/').last}'
+        : json['imagen'].toString
+    (
+    )
+    ,
     );
   }
 }
