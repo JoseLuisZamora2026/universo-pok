@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import '../models/pokemon.dart';
+import 'pokemon_detail_screen.dart';
 
 class BusquedaPokemon extends StatefulWidget {
   const BusquedaPokemon({super.key});
@@ -95,62 +97,14 @@ List<dynamic> get pokemonesFiltrados
   },
   ),
   title: Text(pokemon['nombre']),
- onTap: (){
-      final tipos = List<String>.from(pokemon['tipo']);
-      Color colorTipo(String tipo){
-        switch(tipo.toLowerCase()){
-          case'fuego':
-            return Colors.deepOrange;
-          case'agua':
-            return Colors.blue;
-          case'planta':
-            return Colors.green;
-          case'eléctrico':
-          case'electrico':
-            return Colors.amber.shade700;
-          case'veneno':
-            return Colors.purple;
-          case'volador':
-            return Colors.indigo;
-          case'normal':
-            return Colors.grey;
-            default:
-              return Colors.teal;
-        }
-      }
-      showDialog(context: context, builder: (context)=> AlertDialog(shape: RoundedRectangleBorder(borderRadius:
-      BorderRadius.circular(20),
-      ),
-      title: Text(pokemon['nombre'].toString(),textAlign: TextAlign.center,
-      ),
-      content: Column(mainAxisSize: MainAxisSize.min, children: [SizedBox(height: 160,
-      child: Image.network(pokemon['imagen'].toString(),
-      fit: BoxFit.contain, errorBuilder: (context, error, stackTrace)
-        {
-          return const Icon(Icons.image_not_supported, size: 60,);
-        },
-      ),
-      ),
-        const SizedBox(height: 12), Text('Numero Pokédex: #${pokemon['numeroPokedex'] ?? 'N/D'}',
-        style: const TextStyle(fontWeight: FontWeight.bold,
-        ),
-        ),
-        const SizedBox(height: 12), Wrap(alignment: WrapAlignment.center, spacing: 8, children: tipos.map((tipo)
-          {
-            return Chip(label: Text(tipo, style: const TextStyle(color: Colors.white,
-            ),
-            ),
-            backgroundColor: colorTipo(tipo),
-            );
-            }).toList(),
-          ),
-          ],
-      ),
-          actions: [TextButton(onPressed: () => Navigator.pop(context),
-              child: const Text('cerrar'),
-          ),
-          ],
-      ),
+ onTap: () {
+   final pokemonSeleccionado = Pokemon.fromJson(
+     Map<String, dynamic>.from(pokemon),
+   );
+   Navigator.push(context, MaterialPageRoute(builder: (context) =>
+       PokemonDetailScreen(pokemon: pokemonSeleccionado,
+       ),
+   ),
    );
  },
   subtitle: Text((pokemon['tipo'] as List).join(', ')),
